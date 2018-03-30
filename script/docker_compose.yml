@@ -1,0 +1,51 @@
+version : '2'
+
+services:
+    gaia1:
+          image: iris/gaia:develop
+          container_name: gaia-1
+          volumes:
+              - /mnt/volumes/iris-gaia/gaia1:/gaia
+          command: bash -c "gaia node start --home=/gaia &> /gaia/info.log"
+          ports:
+              - 8998:8998
+              - 46657:46657
+          networks:
+              - gaiatestnet
+
+    gaia2:
+          image: iris/gaia:develop
+          container_name: gaia-2
+          volumes:
+              - /mnt/volumes/iris-gaia/gaia2:/gaia
+          command: bash -c "gaia node start --home=/gaia &> /gaia/info.log --p2p.seeds=\"gaia1:46656\""
+          ports:
+              - 9998:8998
+              - 46667:46657
+          networks:
+              - gaiatestnet
+    gaia3:
+          image: iris/gaia:develop
+          container_name: gaia-3
+          volumes:
+              - /mnt/volumes/iris-gaia/gaia3:/gaia
+          command: bash -c "gaia node start --home=/gaia &> /gaia/info.log  --p2p.seeds=\"gaia1:46656,gaia2:46656\""
+          ports:
+              - 10998:8998
+              - 46677:46657
+          networks:
+              - gaiatestnet
+
+    gaia4:
+          image: iris/gaia:develop
+          container_name: gaia-4
+          volumes:
+              - /mnt/volumes/iris-gaia/gaia4:/gaia
+          command: bash -c "gaia node start --home=/gaia &> /gaia/info.log  --p2p.seeds=\"gaia1:46656,gaia2:46656\""
+          ports:
+              - 11998:8998
+              - 46687:46657
+          networks:
+              - gaiatestnet
+networks:
+    gaiatestnet:
