@@ -1,0 +1,39 @@
+{
+	"genesis_time": "2018-04-02T18:05:18.796742+08:00",
+	"chain_id": "test",
+	"validators": [
+		{
+			"pub_key": {
+				"type": "ed25519",
+				"data": "FC1D0F54C12063182E1A6B98212A9F9B0B5FB6871166AE257AE9C1491CAAD7CE"
+			},
+			"power": 10,
+			"name": "test1"
+		}
+	],
+	"app_hash": "",
+	"app_options": {
+		"accounts": {
+			"accounts": [
+				{
+					"address": "6CB2B0FBCB5EC518E27D5CCF9E788F6D21C683FC",
+					"coins": [
+						{
+							"denom": "fermion",
+							"amount": 100
+						}
+					]
+				}
+			]
+		},
+		"plugin_options": [
+			"coin/issuer",
+			"stake/allowed_bond_denom",
+			{
+				"app": "sigs",
+				"addr": "6CB2B0FBCB5EC518E27D5CCF9E788F6D21C683FC"
+			},
+			"fermion"
+		]
+	}
+}
