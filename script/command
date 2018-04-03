@@ -1,0 +1,10 @@
+执行 go run *.go
+将在data目录下生成genesis文件和pri_validator文件
+
+ ADDR=EB449F7F05BD9267B47AD1AE0B69DDFB26ED8DA0
+ ./basecoind node start --home=$GOPATH/src/github.com/kidinamoto01/genesis-generator/data
+
+执行下面命令后生成node_key.json文件
+ ./basecoind show_node_id --home=$GOPATH/src/github.com/kidinamoto01/genesis-generator/data
+
+

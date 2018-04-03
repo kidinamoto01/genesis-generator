@@ -1,0 +1,16 @@
+=============== Apr 2, 2018 (CST) ===============
+21:24:54.947848 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+21:24:54.948835 db@open opening
+21:24:54.949378 version@stat F·[] S·0B[] Sc·[]
+21:24:54.949808 db@janitor F·2 G·0
+21:24:54.949852 db@open done T·988.394µs
+=============== Apr 2, 2018 (CST) ===============
+21:26:42.484332 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+21:26:42.485825 version@stat F·[] S·0B[] Sc·[]
+21:26:42.485916 db@open opening
+21:26:42.486109 journal@recovery F·1
+21:26:42.487433 journal@recovery recovering @1
+21:26:42.488705 memdb@flush created L0@2 N·12 S·768B ",v12":"blo..ore,v5"
+21:26:42.493209 version@stat F·[1] S·768B[768B] Sc·[0.25]
+21:26:42.494910 db@janitor F·3 G·0
+21:26:42.494970 db@open done T·9.021508ms

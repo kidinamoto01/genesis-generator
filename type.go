@@ -3,20 +3,16 @@ package main
 
 import (
 	"encoding/json"
-	//"github.com/tendermint/go-crypto"
-	//"github.com/tendermint/tendermint/types"
 	cmn "github.com/tendermint/tmlibs/common"
 	"io/ioutil"
-	//	"time"
 	cryptoKeys "github.com/tendermint/go-crypto/keys"
-
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/client/keys"
 	"github.com/tendermint/go-crypto"
 	"time"
 	"sync"
 	"github.com/cosmos/cosmos-sdk/client"
-)
+	dbm "github.com/tendermint/tmlibs/db"
+	)
 
 type Coin struct {
 	Denom string `json:"denom"`
@@ -45,14 +41,14 @@ type GenesisDoc struct {
 	ChainID         string             `json:"chain_id"`
 	Validators      []GenesisValidator `json:"validators"`
 	AppHash         cmn.HexBytes       `json:"app_hash"`
-	AppOptions      AppOptions    `json:"app_options,omitempty"`
+	AppOptions      AppOptions    `json:"app_state,omitempty"`
 }
 
 
 type AppOptions struct{
 
-	Accounts AccountList `json:"accounts"`
-    Options []interface{}   `json:"plugin_options"`
+	Accounts []Account `json:"accounts"`
+  //  Options []interface{}   `json:"plugin_options"`
 }
 
 type Signer interface {
@@ -78,10 +74,16 @@ type PrivValidator struct {
 	mtx      sync.Mutex
 }
 
+var (
+	manager cryptoKeys.Keybase
+)
+
 
 func GenerateGenesis(id string,acclist AccountList) GenesisDoc{
 
 	genDoc := GenesisDoc{}
+
+	genDoc.AppHash = cmn.HexBytes{}
 
 	genDoc.GenesisTime = time.Now()
 
@@ -90,10 +92,10 @@ func GenerateGenesis(id string,acclist AccountList) GenesisDoc{
 
 	genDoc.Validators = generateValidators("test1")
 
-	genDoc.AppOptions.Accounts = acclist
+	genDoc.AppOptions.Accounts = acclist.Accounts
 
 
-	genDoc.AppOptions.Options = generateOption(acclist.Accounts[0].Address)
+	//genDoc.AppOptions.Options = generateOption(acclist.Accounts[0].Address)
 	return genDoc
 
 }
@@ -189,14 +191,17 @@ func GenerateOption(){
 
 
 func GenerateAccount(name string,pass string) (Account,string){
-	kb, err := keys.GetKeyBase() // dbm.NewMemDB()) // :(
+	//kb, err := keys.GetKeyBase() // dbm.NewMemDB()) // :(
+	//kb := client.MockKeyBase()
+	kb,err := GetKeyBase()
 	if err != nil {
 		fmt.Println(err)
 		panic(err)
 	}
 	//var info cryptokeys.Info
-	algo := cryptoKeys.CryptoAlgo("ed25519")
+	algo := cryptoKeys.AlgoEd25519
 
+	fmt.Println("algo: ",algo)
 	info, seed, err := kb.Create(name, pass, algo)
 
 	//fmt.Println(seed)
@@ -234,4 +239,18 @@ type DefaultSigner struct {
 // Sign implements Signer. It signs the byte slice with a private key.
 func (ds *DefaultSigner) Sign(msg []byte) (crypto.Signature, error) {
 	return ds.PrivKey.Sign(msg), nil
+}
+
+
+// GetKeyManager initializes a key manager based on the configuration
+func GetKeyBase() (cryptoKeys.Keybase, error){
+	rootDir := ""
+	KeyDBName :="test"
+	db, err := dbm.NewGoLevelDB(KeyDBName, rootDir)
+	if err != nil {
+		return nil, err
+	}
+	keybase := client.GetKeyBase(db)
+
+	return keybase,nil
 }
